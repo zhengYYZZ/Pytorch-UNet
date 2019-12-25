@@ -55,6 +55,9 @@ class BasicDataset(Dataset):
 
         assert img.size == mask.size, \
             f'Image and mask {idx} should be the same size, but are {img.size} and {mask.size}'
+        x, y = 512, 512
+        mask = mask.resize((x, y), Image.ANTIALIAS)
+        img = img.resize((x, y), Image.ANTIALIAS)
 
         img = self.preprocess(img, self.scale)
         mask = self.preprocess(mask, self.scale)

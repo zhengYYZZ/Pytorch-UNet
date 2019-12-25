@@ -40,7 +40,7 @@ def predict_img(net,
         tf = transforms.Compose(
             [
                 transforms.ToPILImage(),
-                transforms.Resize(full_img.shape[1]),
+                transforms.Resize(full_img.size[1]),
                 transforms.ToTensor()
             ]
         )
@@ -67,7 +67,7 @@ def get_args():
                         help='Filenames of ouput images')
     parser.add_argument('--viz', '-v', action='store_true',
                         help="Visualize the images as they are processed",
-                        default=False)
+                        default=True)
     parser.add_argument('--no-save', '-n', action='store_true',
                         help="Do not save the output masks",
                         default=False)
@@ -76,7 +76,7 @@ def get_args():
                         default=0.5)
     parser.add_argument('--scale', '-s', type=float,
                         help="Scale factor for the input images",
-                        default=0.5)
+                        default=1)
 
     return parser.parse_args()
 
@@ -122,6 +122,7 @@ if __name__ == "__main__":
         logging.info("\nPredicting image {} ...".format(fn))
 
         img = Image.open(fn)
+        img = img.resize((512,512), Image.ANTIALIAS)
 
         mask = predict_img(net=net,
                            full_img=img,
